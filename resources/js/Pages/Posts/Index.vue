@@ -16,7 +16,7 @@ function destroy(id) {
     <BreezeAuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Laravel 9 Vue JS CRUD App using Vite Example - LaravelTuts.com
+                Laravel 9 Vue JS CRUD Table
             </h2>
         </template>
         <div class="py-12">
@@ -34,17 +34,21 @@ function destroy(id) {
                         <table className="table-fixed w-full">
                             <thead>
                                 <tr className="bg-gray-100">
-                                    <th className="px-4 py-2 w-20">No.</th>
-                                    <th className="px-4 py-2">Title</th>
-                                    <th className="px-4 py-2">Body</th>
-                                    <th className="px-4 py-2">Action</th>
+                                    <th className="px-4 border py-2 w-20">No.</th>
+                                    <th className="px-4 border py-2">Title</th>
+                                    <th className="px-4 border py-2">Body</th>
+                                    <th className="px-4 border py-2">Image</th>
+                                    <th className="px-4 border py-2">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="post in posts">
-                                    <td className="border px-4 py-2">{{ post.id }}</td>
-                                    <td className="border px-4 py-2">{{ post.title }}</td>
-                                    <td className="border px-4 py-2">{{ post.body }}</td>
+                                <tr v-for="post,id in posts">
+                                    <td className="border px-4 py-2 text-center">{{ id+1 }}</td>
+                                    <td className="border px-4 py-2 text-center">{{ post.title }}</td>
+                                    <td className="border px-4 py-2 text-center">{{ post.body }}</td>
+                                    <td className="border px-4 py-2 flex justify-center">
+                                        <img :src="'storage/uploads/' + post.fileName" alt="" style="height:60px">
+                                    </td>
                                     <td className="border px-4 py-2">
                                         <Link
                                             tabIndex="1"

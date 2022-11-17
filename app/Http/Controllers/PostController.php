@@ -6,7 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
-
+ 
 class PostController extends Controller
 {
     /**
@@ -16,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('id','DESC')->get();
         return Inertia::render('Posts/Index', ['posts' => $posts]);
     }
 
@@ -41,11 +41,19 @@ class PostController extends Controller
         Validator::make($request->all(), [
             'title' => ['required'],
             'body' => ['required'],
-        ])->validate();
+         ])->validate();
 
-        Post::create($request->all());
+        $fileName = time().'_'.$request->image->getClientOriginalName();
+        $filePath = $request->image->storeAs('uploads', $fileName,'public');
+        $res = [
+            "title"=>$request->title,
+            "body"=>$request->body,
+            "fileName"=>$fileName,
+         ];
 
-        return redirect()->route('posts.index');
+        Post::create($res);
+
+        return $res;
     }
 
     /**

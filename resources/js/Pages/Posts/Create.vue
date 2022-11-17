@@ -4,13 +4,28 @@ import BreezeLabel from '@/Components/Label.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeTextArea from '@/Components/Textarea.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import { ref } from 'vue'
+import axios from 'axios';
+
 const form = useForm({
     title: '',
-    body: ''
-});
-const submit = () => {
-    form.post(route('posts.store'));
+    body: '',
+    FILE:null,
+ });
+function onImageUpload  (event)
+ {
+    form.FILE = event.target.files[0];
+    console.log(form.FILE)
 };
+const submit = () => {
+    const formData = new FormData()
+    formData.append('image', form.FILE, form.FILE.name)
+    formData.append('title', form.title)
+    formData.append('body', form.body)
+    axios.post(route('posts.store') , formData,{}).then(response => {
+        window.location.href = route('posts.index')
+    })
+ };
 </script>
 <template>
     <Head title="Dashboard" />
@@ -57,6 +72,19 @@ const submit = () => {
                                             autofocus />
                                         <span className="text-red-600" v-if="form.errors.body">
                                             {{ form.errors.body }}
+                                        </span>
+                                    </div>
+                                    <div className="mb-4">
+                                        <BreezeLabel for="image" value="Image" />
+
+                                        <input
+                                            type="file"
+                                            name="file"
+                                            class="mt-1 block w-full"
+                                            @change="onImageUpload($event)"
+                                            autofocus />
+                                        <span className="text-red-600" v-if="form.errors.FILE">
+                                            {{ form.errors.FILE }}
                                         </span>
                                     </div>
                                 </div>
